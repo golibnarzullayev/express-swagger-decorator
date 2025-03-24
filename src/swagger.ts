@@ -106,6 +106,8 @@ export class SwaggerModule {
       .resolve("swagger-ui-dist")
       .replace(/swagger-ui-dist.*/, "swagger-ui-dist");
 
+    const docsPath = options.path || "/api-docs";
+
     fs.writeFileSync("swagger.json", JSON.stringify(swaggerDocs));
 
     app.use(
@@ -113,20 +115,29 @@ export class SwaggerModule {
       swaggerUi.serve,
       swaggerUi.setup(swaggerDocs, {
         swaggerOptions: {
-          url: options.path || "/api-docs" + "/swagger.json",
+          url: `${docsPath}/swagger.json`,
         },
       })
     );
 
-    app.use("/api-docs", (req, res, next) => {
-      const filePath = path.join(swaggerUiPath, req.path);
-      const mimeType = mime.lookup(filePath) || "application/javascript";
-      res.setHeader("Content-Type", mimeType);
-      express.static(swaggerUiPath)(req, res, next);
+    app.get(`${docsPath}/swagger.json`, (req, res) => {
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "no-store");
+      res.json(swaggerDocs);
     });
 
-    app.get(`${options.path || "/api-docs"}/swagger.json`, (req, res) =>
-      res.json(swaggerDocs)
-    );
+    app.use(docsPath, (req, res, next) => {
+      const filePath = path.join(swaggerUiPath, req.path);
+      if (!fs.existsSync(filePath)) return next();
+
+      const mimeType = mime.lookup(filePath) || "application/javascript";
+      if (mimeType.startsWith("text/html")) {
+        console.warn("⚠️ Warning: Unexpected MIME type for", filePath);
+      }
+
+      res.setHeader("Content-Type", mimeType);
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      express.static(swaggerUiPath)(req, res, next);
+    });
   }
 }
