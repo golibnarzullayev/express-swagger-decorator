@@ -45,7 +45,7 @@ import {
   Paths,
   ApiParams,
   ApiQueries,
-} from "express-swagger-decorators";
+} from "express-swagger-decorator";
 
 @ApiTags("Users")
 export class UserController {
