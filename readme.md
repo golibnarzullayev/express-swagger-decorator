@@ -26,6 +26,7 @@ SwaggerModule.setup(
     description: "This is an example API",
     version: "1.0.0",
     path: "/api-docs",
+    servers: [{ url: "https://your-server-url.uz", description: "Server url" }],
   },
   [UserController]
 );

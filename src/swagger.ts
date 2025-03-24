@@ -11,12 +11,14 @@ export interface SwaggerOptions {
   title: string;
   description: string;
   version: string;
+  servers: Array<{ url: string; description: string }>;
   path?: string;
 }
 
 export class SwaggerModule {
   static setup(app: Application, options: SwaggerOptions, controllers: any[]) {
     const paths: any = {};
+    const securitySchemes: any = {};
 
     controllers.forEach((controller) => {
       const instance = new controller();
@@ -40,13 +42,20 @@ export class SwaggerModule {
         const path = Reflect.getMetadata("api:path", instance, method);
         const methodTags =
           Reflect.getMetadata("api:tags", instance, method) || [];
-        const security: any[] = [];
 
         const authType = Reflect.getMetadata("api:security", instance, method);
-        if (authType === "basic") {
-          security.push({ BasicAuth: [] });
-        } else if (authType === "bearer") {
-          security.push({ BearerAuth: [] });
+        let security = undefined;
+
+        if (authType?.name === "basicAuth") {
+          securitySchemes.BasicAuth = { type: "http", scheme: "basic" };
+          security = [{ BasicAuth: [] }];
+        } else if (authType?.name === "bearerAuth") {
+          securitySchemes.BearerAuth = {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          };
+          security = [{ BearerAuth: [] }];
         }
 
         if (!path) return;
@@ -91,7 +100,7 @@ export class SwaggerModule {
           requestBody: body
             ? { content: { "application/json": { schema: body } } }
             : undefined,
-          security: security.length ? security : undefined,
+          security,
         };
       });
     });
@@ -103,18 +112,9 @@ export class SwaggerModule {
         description: options.description,
         version: options.version,
       },
+      servers: options.servers,
       components: {
-        securitySchemes: {
-          BasicAuth: {
-            type: "http",
-            scheme: "basic",
-          },
-          BearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
-        },
+        securitySchemes,
       },
       paths,
     };
