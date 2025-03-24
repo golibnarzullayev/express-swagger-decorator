@@ -1,6 +1,6 @@
 {
   "name": "express-swagger-decorator",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Express.js uchun NestJS uslubidagi Swagger dekoratorlari",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
