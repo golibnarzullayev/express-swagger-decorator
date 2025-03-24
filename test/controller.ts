@@ -7,6 +7,7 @@ import {
   Paths,
   ApiParams,
   ApiQueries,
+  ApiResponse,
 } from "express-swagger-decorator";
 
 @ApiTags("Users")
@@ -18,6 +19,7 @@ export class UserController {
     { name: "limit", description: "Limit", required: true },
   ])
   @ApiOperation("Barcha foydalanuvchilarni olish")
+  @ApiResponse(200, "OK")
   async getUsers(req: Request, res: Response) {
     res.json([{ id: 1, name: "John Doe" }]);
   }

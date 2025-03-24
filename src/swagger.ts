@@ -18,8 +18,6 @@ export class SwaggerModule {
       const controllerTags = Reflect.getMetadata("api:tags", controller);
 
       Object.getOwnPropertyNames(controller.prototype).forEach((method) => {
-        if (method === "constructor") return;
-
         const httpMethod =
           Reflect.getMetadata("api:method", instance, method) || "get";
         const operation = Reflect.getMetadata(
