@@ -1,11 +1,10 @@
 import swaggerUi from "swagger-ui-express";
-import { Application } from "express";
+import express, { Application } from "express";
+import swaggerJSDoc from "swagger-jsdoc";
+import fs from "node:fs";
+import path from "node:path";
 
 import "reflect-metadata";
-import { url } from "inspector";
-import swaggerJSDoc from "swagger-jsdoc";
-
-import fs from "node:fs";
 
 export interface SwaggerOptions {
   title: string;
@@ -102,6 +101,10 @@ export class SwaggerModule {
       apis: [],
     });
 
+    const swaggerUiPath = require
+      .resolve("swagger-ui-dist")
+      .replace(/swagger-ui-dist.*/, "swagger-ui-dist");
+
     fs.writeFileSync("swagger.json", JSON.stringify(swaggerDocs));
 
     app.use(
@@ -109,12 +112,15 @@ export class SwaggerModule {
       swaggerUi.serve,
       swaggerUi.setup(swaggerDocs, {
         swaggerOptions: {
-          url: "/v1/swagger.json",
-          docExpansion: "none",
+          url: options.path || "/api-docs" + "/swagger.json",
         },
       })
     );
 
-    app.get("/v1/swagger.json", (req, res) => res.json(swaggerDocs));
+    app.use("/api-docs", express.static(swaggerUiPath));
+
+    app.get(`${options.path || "/api-docs"}/swagger.json`, (req, res) =>
+      res.json(swaggerDocs)
+    );
   }
 }
