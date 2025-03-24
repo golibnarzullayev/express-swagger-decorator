@@ -1,8 +1,22 @@
 import "reflect-metadata";
+import { SchemaType } from "./type";
+import { extractRequiredFields } from "./utils";
 
 export const ApiTags = (...tags: string[]) => {
   return (target: Object): void => {
     Reflect.defineMetadata("api:tags", tags, target);
+  };
+};
+
+export const ApiPath = (path: string) => {
+  return (target: Object, propertyKey: any): void => {
+    Reflect.defineMetadata("api:path", path, target, propertyKey);
+  };
+};
+
+export const ApiMethod = (method: string) => {
+  return (target: Object, propertyKey: any): void => {
+    Reflect.defineMetadata("api:method", method, target, propertyKey);
   };
 };
 
@@ -12,32 +26,38 @@ export const ApiOperation = (summary: string) => {
   };
 };
 
-export const ApiResponse = (status: number, description: string) => {
+export const ApiResponse = (
+  status: number,
+  description: string,
+  schema?: SchemaType
+) => {
   return (target: Object, propertyKey: any): void => {
+    const requiredFields = schema ? extractRequiredFields(schema) : [];
+
     const responses =
       Reflect.getMetadata("api:responses", target, propertyKey) || [];
-    responses.push({ status, description });
+    responses.push({
+      status,
+      description,
+      schema: { ...schema, required: requiredFields },
+    });
     Reflect.defineMetadata("api:responses", responses, target, propertyKey);
   };
 };
 
-export const ApiBody = (schema: any) => {
+export const ApiBody = (schema: SchemaType) => {
   return (target: Object, propertyKey: any) => {
-    Reflect.defineMetadata("api:body", schema, target, propertyKey);
-  };
-};
+    const requiredFields = extractRequiredFields(schema);
 
-export const ApiMethod = (
-  method: "get" | "post" | "put" | "delete" | "patch"
-) => {
-  return (target: Object, propertyKey: any) => {
-    Reflect.defineMetadata("api:method", method, target, propertyKey);
-  };
-};
-
-export const Paths = (path: string) => {
-  return (target: Object, propertyKey: any) => {
-    Reflect.defineMetadata("api:path", path, target, propertyKey);
+    Reflect.defineMetadata(
+      "api:body",
+      {
+        ...schema,
+        required: requiredFields.length > 0 ? requiredFields : undefined,
+      },
+      target,
+      propertyKey
+    );
   };
 };
 

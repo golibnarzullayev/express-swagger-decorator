@@ -51,7 +51,14 @@ export class SwaggerModule {
               ? [controllerTags]
               : undefined,
           responses: responses.reduce((acc: any, res: any) => {
-            acc[res.status] = { description: res.description };
+            acc[res.status] = {
+              description: res.description,
+              content: {
+                "application/json": {
+                  schema: res.schema || {},
+                },
+              },
+            };
             return acc;
           }, {}),
           parameters: [

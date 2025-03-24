@@ -42,7 +42,7 @@ import {
   ApiOperation,
   ApiBody,
   ApiMethod,
-  Paths,
+  ApiPath,
   ApiParams,
   ApiQueries,
 } from "express-swagger-decorator";
@@ -50,19 +50,41 @@ import {
 @ApiTags("Users")
 export class UserController {
   @ApiMethod("get")
-  @Paths("/users")
+  @ApiPath("/users")
   @ApiOperation("Get all users")
+  @ApiResponse(200, "OK", {
+    type: "object",
+    properties: {
+      data: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            id: { type: "string", required: true, example: "12312312" },
+            name: { type: "string", required: true, example: "John" },
+          },
+        },
+      },
+      message: { type: "string", required: true },
+    },
+  })
   async getUsers(req: Request, res: Response) {
     res.json([{ id: 1, name: "John Doe" }]);
   }
 
   @ApiMethod("post")
-  @Paths("/users")
+  @ApiPath("/users")
   @ApiOperation("Create a new user")
   @ApiBody({
     type: "object",
     properties: {
-      name: { type: "string" },
+      name: { type: "string", required: true },
+    },
+  })
+  @ApiResponse(201, "OK", {
+    type: "object",
+    properties: {
+      message: { type: "string", required: true },
     },
   })
   async createUser(req: Request, res: Response) {
@@ -71,9 +93,21 @@ export class UserController {
   }
 
   @ApiMethod("get")
-  @Paths("/users/:id")
+  @ApiPath("/users/:id")
   @ApiParams([{ name: "id", description: "User ID" }])
   @ApiOperation("Get a user by ID")
+  @ApiResponse(200, "OK", {
+    type: "object",
+    properties: {
+      data: {
+        type: "object",
+        properties: {
+          id: { type: "string", required: true, example: "12312312" },
+          name: { type: "string", required: true, example: "John" },
+        },
+      },
+    },
+  })
   async getUserById(req: Request, res: Response) {
     res.json({ id: req.params.id, name: "John Doe" });
   }
