@@ -1,0 +1,35 @@
+{
+  "name": "express-swagger-decorator",
+  "version": "1.0.2",
+  "description": "Express.js uchun NestJS uslubidagi Swagger dekoratorlari",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "express",
+    "swagger",
+    "decorators",
+    "nestjs"
+  ],
+  "author": "Sizning Ismingiz",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "reflect-metadata": "^0.1.13",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "typescript": "^5.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/golibnarzullayev/express-swagger-decorator.git"
+  }
+}
