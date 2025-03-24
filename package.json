@@ -1,6 +1,6 @@
 {
   "name": "express-swagger-doc-generator",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Express.js uchun NestJS uslubidagi Swagger dekoratorlari",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
