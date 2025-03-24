@@ -1,5 +1,5 @@
 import express from "express";
-import { SwaggerModule } from "../src/swagger";
+import { SwaggerModule } from "express-swagger-decorator";
 import { UserController } from "./controller";
 
 const app = express();

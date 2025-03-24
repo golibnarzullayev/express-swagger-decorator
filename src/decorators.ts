@@ -1,22 +1,19 @@
 import "reflect-metadata";
 
-export const ApiTags = (...tags: string[]): ClassDecorator => {
-  return (target) => {
+export const ApiTags = (...tags: string[]) => {
+  return (target: Object): void => {
     Reflect.defineMetadata("api:tags", tags, target);
   };
 };
 
-export const ApiOperation = (summary: string): MethodDecorator => {
-  return (target, propertyKey, descriptor) => {
+export const ApiOperation = (summary: string) => {
+  return (target: Object, propertyKey: any): void => {
     Reflect.defineMetadata("api:operation", { summary }, target, propertyKey);
   };
 };
 
-export const ApiResponse = (
-  status: number,
-  description: string
-): MethodDecorator => {
-  return (target, propertyKey) => {
+export const ApiResponse = (status: number, description: string) => {
+  return (target: Object, propertyKey: any): void => {
     const responses =
       Reflect.getMetadata("api:responses", target, propertyKey) || [];
     responses.push({ status, description });
@@ -24,30 +21,30 @@ export const ApiResponse = (
   };
 };
 
-export const ApiBody = (schema: any): MethodDecorator => {
-  return (target, propertyKey) => {
+export const ApiBody = (schema: any) => {
+  return (target: Object, propertyKey: any) => {
     Reflect.defineMetadata("api:body", schema, target, propertyKey);
   };
 };
 
 export const ApiMethod = (
   method: "get" | "post" | "put" | "delete" | "patch"
-): MethodDecorator => {
-  return (target, propertyKey) => {
+) => {
+  return (target: Object, propertyKey: any) => {
     Reflect.defineMetadata("api:method", method, target, propertyKey);
   };
 };
 
-export const Paths = (path: string): MethodDecorator => {
-  return (target, propertyKey) => {
+export const Paths = (path: string) => {
+  return (target: Object, propertyKey: any) => {
     Reflect.defineMetadata("api:path", path, target, propertyKey);
   };
 };
 
 export const ApiParams = (
   params: { name: string; description: string; required?: boolean }[]
-): MethodDecorator => {
-  return (target, propertyKey) => {
+) => {
+  return (target: Object, propertyKey: any) => {
     const existingParams =
       Reflect.getMetadata("api:params", target, propertyKey) || [];
     Reflect.defineMetadata(
@@ -61,8 +58,8 @@ export const ApiParams = (
 
 export const ApiQueries = (
   queries: { name: string; description: string; required?: boolean }[]
-): MethodDecorator => {
-  return (target, propertyKey) => {
+) => {
+  return (target: Object, propertyKey: any) => {
     const existingQueries =
       Reflect.getMetadata("api:queries", target, propertyKey) || [];
     Reflect.defineMetadata(
