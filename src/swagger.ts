@@ -1,8 +1,11 @@
 import swaggerUi from "swagger-ui-express";
-import express, { Application } from "express";
-import path from "path";
+import { Application } from "express";
 
 import "reflect-metadata";
+import { url } from "inspector";
+import swaggerJSDoc from "swagger-jsdoc";
+
+import fs from "node:fs";
 
 export interface SwaggerOptions {
   title: string;
@@ -94,17 +97,24 @@ export class SwaggerModule {
       paths,
     };
 
-    const swaggerDocument = JSON.parse(JSON.stringify(swaggerDefinition));
+    const swaggerDocs = swaggerJSDoc({
+      definition: swaggerDefinition,
+      apis: [],
+    });
 
-    app.use(
-      "/api-docs",
-      express.static(path.join(__dirname, "node_modules/swagger-ui-dist"))
-    );
+    fs.writeFileSync("swagger.json", JSON.stringify(swaggerDocs));
 
     app.use(
       options.path || "/api-docs",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
+      swaggerUi.setup(swaggerDocs, {
+        swaggerOptions: {
+          url: "/v1/swagger.json",
+          docExpansion: "none",
+        },
+      })
     );
+
+    app.get("/v1/swagger.json", (req, res) => res.json(swaggerDocs));
   }
 }
