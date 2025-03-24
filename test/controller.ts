@@ -27,13 +27,15 @@ export class UserController {
         items: {
           type: "object",
           properties: {
-            id: { type: "string", required: true, example: "12312312" },
-            name: { type: "string", required: true, example: "John" },
+            id: { type: "string", example: "12312312" },
+            name: { type: "string", example: "John" },
           },
+          required: ["id", "name"],
         },
       },
-      message: { type: "string", required: true },
+      message: { type: "string" },
     },
+    required: ["data", "message"],
   })
   async getUsers(req: Request, res: Response) {
     res.json([{ id: 1, name: "John Doe" }]);
@@ -45,8 +47,9 @@ export class UserController {
   @ApiBody({
     type: "object",
     properties: {
-      name: { type: "string", required: true },
+      name: { type: "string" },
     },
+    required: ["name"],
   })
   async createUser(req: Request, res: Response) {
     const { name } = req.body;
@@ -63,9 +66,10 @@ export class UserController {
       data: {
         type: "object",
         properties: {
-          id: { type: "string", required: true, example: "12312312" },
-          name: { type: "string", required: true, example: "John" },
+          id: { type: "string", example: "12312312" },
+          name: { type: "string", example: "John" },
         },
+        required: ["id", "name"],
       },
     },
   })

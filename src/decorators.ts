@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { SchemaType } from "./type";
-import { extractRequiredFields } from "./utils";
 
 export const ApiTags = (...tags: string[]) => {
   return (target: Object): void => {
@@ -32,14 +31,12 @@ export const ApiResponse = (
   schema?: SchemaType
 ) => {
   return (target: Object, propertyKey: any): void => {
-    const requiredFields = schema ? extractRequiredFields(schema) : [];
-
     const responses =
       Reflect.getMetadata("api:responses", target, propertyKey) || [];
     responses.push({
       status,
       description,
-      schema: { ...schema, required: requiredFields },
+      schema: schema,
     });
     Reflect.defineMetadata("api:responses", responses, target, propertyKey);
   };
@@ -47,17 +44,7 @@ export const ApiResponse = (
 
 export const ApiBody = (schema: SchemaType) => {
   return (target: Object, propertyKey: any) => {
-    const requiredFields = extractRequiredFields(schema);
-
-    Reflect.defineMetadata(
-      "api:body",
-      {
-        ...schema,
-        required: requiredFields.length > 0 ? requiredFields : undefined,
-      },
-      target,
-      propertyKey
-    );
+    Reflect.defineMetadata("api:body", schema, target, propertyKey);
   };
 };
 
