@@ -1,5 +1,5 @@
 import swaggerUi from "swagger-ui-express";
-import { Express } from "express";
+import { Application } from "express";
 import "reflect-metadata";
 
 export interface SwaggerOptions {
@@ -10,7 +10,7 @@ export interface SwaggerOptions {
 }
 
 export class SwaggerModule {
-  static setup(app: Express, options: SwaggerOptions, controllers: any[]) {
+  static setup(app: Application, options: SwaggerOptions, controllers: any[]) {
     const paths: any = {};
 
     controllers.forEach((controller) => {
