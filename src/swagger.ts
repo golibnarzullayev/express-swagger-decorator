@@ -92,10 +92,12 @@ export class SwaggerModule {
       paths,
     };
 
+    const swaggerDocument = JSON.parse(JSON.stringify(swaggerDefinition));
+
     app.use(
       options.path || "/api-docs",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDefinition)
+      swaggerUi.setup(swaggerDocument)
     );
   }
 }
