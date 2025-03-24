@@ -36,20 +36,20 @@ export class SwaggerModule {
         const methodTags =
           Reflect.getMetadata("api:tags", instance, method) || [];
 
-        if (!path) return; // Agar @Paths yo'q bo‘lsa, methodni Swagger’ga qo‘shmaymiz
+        if (!path) return;
 
         if (!paths[path]) {
           paths[path] = {};
         }
 
         paths[path][httpMethod] = {
+          operationId: method,
           summary: operation?.summary,
-          tags:
-            methodTags.length > 0
-              ? methodTags
-              : controllerTags
-              ? [controllerTags]
-              : undefined,
+          tags: [...new Set([...methodTags, ...controllerTags])]
+            .flat()
+            .map((tag) =>
+              typeof tag === "string" ? tag.replace(/\[|\]|"/g, "").trim() : tag
+            ),
           responses: responses.reduce((acc: any, res: any) => {
             acc[res.status] = {
               description: res.description,
