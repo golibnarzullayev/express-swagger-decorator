@@ -12,5 +12,5 @@ export type SchemaType =
   | {
       type: "object";
       properties: Record<string, SchemaType>;
-      required?: string[];
+      required?: boolean;
     };
