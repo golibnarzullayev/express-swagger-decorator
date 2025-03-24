@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import swaggerJSDoc from "swagger-jsdoc";
 import fs from "node:fs";
 import path from "node:path";
+import mime from "mime-types";
 
 import "reflect-metadata";
 
@@ -117,7 +118,12 @@ export class SwaggerModule {
       })
     );
 
-    app.use("/api-docs", express.static(swaggerUiPath));
+    app.use("/api-docs", (req, res, next) => {
+      const filePath = path.join(swaggerUiPath, req.path);
+      const mimeType = mime.lookup(filePath) || "application/javascript";
+      res.setHeader("Content-Type", mimeType);
+      express.static(swaggerUiPath)(req, res, next);
+    });
 
     app.get(`${options.path || "/api-docs"}/swagger.json`, (req, res) =>
       res.json(swaggerDocs)
