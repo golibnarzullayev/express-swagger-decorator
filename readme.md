@@ -113,33 +113,3 @@ export class UserController {
   }
 }
 ```
-
-## Available Decorators
-
-### `@ApiTags(name: string)`
-
-Defines the tag for grouping endpoints.
-
-### `@ApiMethod(method: "get" | "post" | "put" | "delete")`
-
-Defines the HTTP method.
-
-### `@Paths(path: string)`
-
-Defines the endpoint path.
-
-### `@ApiOperation(summary: string)`
-
-Provides a short description of the endpoint.
-
-### `@ApiBody(schema: object)`
-
-Defines the request body schema.
-
-### `@ApiParams(params: { name: string; description: string }[])`
-
-Defines path parameters.
-
-### `@ApiQueries(queries: { name: string; description: string; required?: boolean }[])`
-
-Defines query parameters with an optional `required` flag.
