@@ -111,16 +111,16 @@ export class SwaggerModule {
     fs.writeFileSync("swagger.json", JSON.stringify(swaggerDocs));
 
     app.use(
-      options.path || "/api-docs",
+      docsPath,
       swaggerUi.serve,
       swaggerUi.setup(swaggerDocs, {
         swaggerOptions: {
-          url: `${docsPath}/swagger.json`,
+          url: "/swagger.json",
         },
       })
     );
 
-    app.get(`${docsPath}/swagger.json`, (req, res) => {
+    app.get("/swagger.json", (req, res) => {
       res.setHeader("Content-Type", "application/json");
       res.setHeader("Cache-Control", "no-store");
       res.json(swaggerDocs);
