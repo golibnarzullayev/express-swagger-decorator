@@ -1,5 +1,7 @@
 import swaggerUi from "swagger-ui-express";
-import { Application } from "express";
+import express, { Application } from "express";
+import path from "path";
+
 import "reflect-metadata";
 
 export interface SwaggerOptions {
@@ -93,6 +95,11 @@ export class SwaggerModule {
     };
 
     const swaggerDocument = JSON.parse(JSON.stringify(swaggerDefinition));
+
+    app.use(
+      "/api-docs",
+      express.static(path.join(__dirname, "node_modules/swagger-ui-dist"))
+    );
 
     app.use(
       options.path || "/api-docs",
