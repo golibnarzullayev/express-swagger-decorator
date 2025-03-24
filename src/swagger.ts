@@ -136,7 +136,6 @@ export class SwaggerModule {
       }
 
       res.setHeader("Content-Type", mimeType);
-      res.setHeader("Cache-Control", "public, max-age=3600");
       express.static(swaggerUiPath)(req, res, next);
     });
   }
