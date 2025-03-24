@@ -8,7 +8,7 @@ import {
   ApiParams,
   ApiQueries,
   ApiResponse,
-} from "express-swagger-decorator";
+} from "express-swagger-doc-generator";
 
 @ApiTags("Users")
 export class UserController {
