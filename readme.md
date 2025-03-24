@@ -45,6 +45,8 @@ import {
   ApiPath,
   ApiParams,
   ApiQueries,
+  ApiBasicAuth,
+  ApiBearerAuth,
 } from "express-swagger-decorator";
 
 @ApiTags("Users")
@@ -52,6 +54,7 @@ export class UserController {
   @ApiMethod("get")
   @ApiPath("/users")
   @ApiOperation("Get all users")
+  @ApiBasicAuth()
   @ApiResponse(200, "OK", {
     type: "object",
     properties: {
@@ -77,6 +80,7 @@ export class UserController {
   @ApiMethod("post")
   @ApiPath("/users")
   @ApiOperation("Create a new user")
+  @ApiBearerAuth()
   @ApiBody({
     type: "object",
     properties: {
@@ -100,6 +104,7 @@ export class UserController {
   @ApiPath("/users/:id")
   @ApiParams([{ name: "id", description: "User ID" }])
   @ApiOperation("Get a user by ID")
+  @ApiBearerAuth()
   @ApiResponse(200, "OK", {
     type: "object",
     properties: {

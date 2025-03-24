@@ -77,3 +77,30 @@ export const ApiQueries = (
     );
   };
 };
+
+export const ApiBasicAuth = () => {
+  return (target: Object, propertyKey: any): void => {
+    Reflect.defineMetadata(
+      "api:security",
+      { type: "http", scheme: "basic", name: "basicAuth" },
+      target,
+      propertyKey
+    );
+  };
+};
+
+export const ApiBearerAuth = () => {
+  return (target: Object, propertyKey: any): void => {
+    Reflect.defineMetadata(
+      "api:security",
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "bearerAuth",
+      },
+      target,
+      propertyKey
+    );
+  };
+};

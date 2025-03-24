@@ -40,6 +40,14 @@ export class SwaggerModule {
         const path = Reflect.getMetadata("api:path", instance, method);
         const methodTags =
           Reflect.getMetadata("api:tags", instance, method) || [];
+        const security: any[] = [];
+
+        const authType = Reflect.getMetadata("api:security", instance, method);
+        if (authType === "basic") {
+          security.push({ BasicAuth: [] });
+        } else if (authType === "bearer") {
+          security.push({ BearerAuth: [] });
+        }
 
         if (!path) return;
 
@@ -83,6 +91,7 @@ export class SwaggerModule {
           requestBody: body
             ? { content: { "application/json": { schema: body } } }
             : undefined,
+          security: security.length ? security : undefined,
         };
       });
     });
@@ -93,6 +102,19 @@ export class SwaggerModule {
         title: options.title,
         description: options.description,
         version: options.version,
+      },
+      components: {
+        securitySchemes: {
+          BasicAuth: {
+            type: "http",
+            scheme: "basic",
+          },
+          BearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
       },
       paths,
     };
