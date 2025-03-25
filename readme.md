@@ -5,7 +5,7 @@ This package provides a set of decorators to simplify API documentation generati
 ## Installation
 
 ```sh
-npm install express-swagger-decorator
+npm install express-swagger-doc-generator
 ```
 
 ## Usage
