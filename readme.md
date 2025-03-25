@@ -5,7 +5,7 @@ This package provides a set of decorators to simplify API documentation generati
 ## Installation
 
 ```sh
-npm install express-swagger-decorator
+npm install express-swagger-doc-generator
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ npm install express-swagger-decorator
 
 ```ts
 import express from "express";
-import { SwaggerModule } from "express-swagger-decorator";
+import { SwaggerModule } from "express-swagger-doc-generator";
 import { UserController } from "./controllers/user.controller";
 
 const app = express();
@@ -48,7 +48,7 @@ import {
   ApiQueries,
   ApiBasicAuth,
   ApiBearerAuth,
-} from "express-swagger-decorator";
+} from "express-swagger-doc-generator";
 
 @ApiTags("Users")
 export class UserController {
